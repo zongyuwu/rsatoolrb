@@ -7,18 +7,22 @@ The tool provide the same functionailiy as rsatool wirtten in python [here](http
 
   * If you have the (p, q, e) pair
 ```ruby
-./rsatool.rb -p P -q Q -e E #By default E is 0x10001 (65537)
+ruby ./rsatool.rb -p P -q Q -e E #By default E is 0x10001 (65537)
 ```  
   * If you have (N, d, e) pair
- ```ruby
- ./rsatool.rb -n N -d D -e E #By default E is 0x10001 (65537)
- ```  
+```ruby
+ruby ./rsatool.rb -n N -d D -e E #By default E is 0x10001 (65537)
+```  
   * Output format
 ```ruby
-./rsatool.rb -f (DER|PEM) -p P -q Q -e E
+ruby ./rsatool.rb -f (DER|PEM) -p P -q Q -e E
 ```  
   * Output to file not stdout
 ```ruby
-./rsatool.rb -o filepath -f (DER|PEM) -p P -q Q -e E
+ruby ./rsatool.rb -o filepath -f (DER|PEM) -p P -q Q -e E
 ```  
+  * Decrypt cipheretext by given rsa parameter  
+```ruby
+ruby ./rsatool.rb (some rsa parameter) -c ciphertext_file
+```
  

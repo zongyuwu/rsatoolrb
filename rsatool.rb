@@ -142,6 +142,41 @@ class RSAtool
       puts "Unsupported file format"
     end
   end
+
+  def private_decrypt filename
+    rsa = OpenSSL::PKey::RSA.new to_pem
+    raise "Not private key" if !rsa.private?
+    raise "The file to be decrypt does not exist" if !File.exist? filename
+    s = File.read filename  
+
+    begin
+      puts "RSA_PKCS1_PADDING"
+      p rsa.private_decrypt s, 1
+    rescue => e
+      p e
+    end
+
+    begin
+      puts "RSA_PKCS1_OAEP_PADDING"
+      p rsa.private_decrypt s, 2
+    rescue => e
+      p e
+    end
+
+    begin
+      puts "RSA_NO_PADDING"
+      p rsa.private_decrypt s, 3
+    rescue => e
+      p e
+    end
+
+    begin
+      puts "RSA_SSLV23_PADDING"
+      p rsa.private_decrypt s, 4 
+    rescue => e
+      p e
+    end
+  end
 end
 
 options = {format: "PEM"}
@@ -175,6 +210,10 @@ OptionParser.new do |opts|
   opts.on("-f FORMAT", "Ouput format(PEM/DER)") do |v|
     options[:format] = v
   end
+
+  opts.on("-c C", "Cipher to decrypt") do |v|
+    options[:c] = v
+  end
 end.parse!
 
 options[:e] = 65537 if options[:e].nil? #default e = 0x10001 = 65537
@@ -204,4 +243,4 @@ end
 SanityCheck.new(options[:n].to_i, options[:p].to_i, options[:q].to_i, options[:e].to_i, options[:d].to_i)
 r = RSAtool.new(options[:p].to_i, options[:q].to_i, options[:e].to_i)
 r.output(options[:outfile], options[:format])
-
+r.private_decrypt options[:c] if !options[:c].nil?
